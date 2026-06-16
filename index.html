@@ -298,6 +298,11 @@
     padding: 1.75rem;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .tool-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
   .tool-card:hover {
     border-color: var(--morado-medio);
     box-shadow: 0 4px 20px rgba(91,45,142,0.07);
@@ -488,11 +493,11 @@
     <h2 class="section-title">Recursos descargables</h2>
     <p class="section-desc">Archivos listos para usar. Sin suscripciones, sin servidores. Tú traes tu API key, yo traje el diseño.</p>
     <div class="tools-grid">
-      <div class="tool-card">
-        <span class="tool-tag tag-pronto">Próximamente</span>
+      <a href="generador-briefs.html" class="tool-card tool-card-link">
+        <span class="tool-tag tag-gratis">Disponible</span>
         <h3>Generador de briefs</h3>
         <p>Crea briefs de diseño completos en segundos. Para talleres, clases o proyectos reales.</p>
-      </div>
+      </a>
       <div class="tool-card">
         <span class="tool-tag tag-pronto">Próximamente</span>
         <h3>Evaluador de portafolios</h3>
