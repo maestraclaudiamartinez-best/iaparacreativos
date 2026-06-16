@@ -143,6 +143,17 @@
   }
   .api-nota a { color: var(--morado); text-decoration: none; }
 
+  .pasos-key {
+    margin: 0.75rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--gris);
+    line-height: 1.7;
+  }
+  .pasos-key li { margin-bottom: 0.25rem; }
+  .pasos-key a { color: var(--morado); text-decoration: none; font-weight: 500; }
+  .pasos-key strong { font-weight: 600; color: var(--negro); }
+
   /* FORM */
   .form-card {
     background: var(--blanco);
@@ -340,7 +351,14 @@
     <div class="api-row">
       <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off">
     </div>
-    <p class="api-nota">Tu key nunca sale de tu navegador. <a href="https://console.groq.com/keys" target="_blank">Obtén una gratis en console.groq.com →</a></p>
+    <p class="api-nota">Tu key nunca sale de tu navegador. ¿No tienes una? Sigue estos pasos:</p>
+    <ol class="pasos-key">
+      <li>Entra a <a href="https://console.groq.com" target="_blank">console.groq.com</a> y crea una cuenta gratis (con Google es lo más rápido)</li>
+      <li>En el menú superior, clic en <strong>API Keys</strong></li>
+      <li>Clic en <strong>Create API Key</strong>, ponle el nombre que quieras</li>
+      <li>Copia la key apenas aparezca — solo se muestra una vez</li>
+      <li>Pégala arriba en el campo de esta página</li>
+    </ol>
   </div>
 
   <!-- FORMULARIO -->
@@ -599,8 +617,14 @@ REGLAS:
     const data = await response.json();
 
     if (!response.ok) {
-      const msg = data?.error?.message || 'Error al conectar con la API.';
-      mostrarError('Error: ' + msg);
+      if (response.status === 401) {
+        mostrarError('Tu API key no es válida o fue revocada. Genera una nueva en console.groq.com y vuelve a intentar.');
+      } else if (response.status === 429) {
+        mostrarError('Alcanzaste el límite de uso por ahora. Espera un minuto e intenta de nuevo.');
+      } else {
+        const msg = data?.error?.message || 'Error al conectar con la API.';
+        mostrarError('Error: ' + msg);
+      }
       return;
     }
 
@@ -608,7 +632,7 @@ REGLAS:
     renderizarBrief(texto);
 
   } catch (err) {
-    mostrarError('No se pudo conectar. Verifica tu API key y conexión a internet.');
+    mostrarError('No se pudo conectar. Verifica tu conexión a internet e intenta de nuevo.');
   } finally {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('btn-generar').disabled = false;
