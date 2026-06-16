@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Rúbricas · IA para Creativos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --morado: #5B2D8E;
+    --morado-claro: #EDE6F6;
+    --morado-medio: #C4A8E8;
+    --teal: #00C9B1;
+    --teal-claro: #E0FAF7;
+    --negro: #0D0D0D;
+    --gris: #555;
+    --gris-borde: #E5E5E5;
+    --fondo: #FAFAFA;
+    --blanco: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--fondo);
+    color: var(--negro);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 6vw;
+    border-bottom: 1px solid var(--gris-borde);
+    background: rgba(250,250,250,0.94);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--negro);
+    text-decoration: none;
+  }
+  .logo span { color: var(--morado); }
+  .nav-back {
+    font-size: 0.875rem;
+    color: var(--gris);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--morado); }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3.5rem 6vw 5rem;
+  }
+
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--morado);
+    background: var(--morado-claro);
+    padding: 0.3rem 0.85rem;
+    border-radius: 99px;
+    margin-bottom: 1.25rem;
+  }
+  .page-title {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    color: var(--negro);
+  }
+  .page-title span { color: var(--morado); }
+  .page-desc {
+    color: var(--gris);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+    max-width: 60ch;
+  }
+
+  .api-block {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .api-block label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-bottom: 0.6rem;
+  }
+  .api-row { display: flex; gap: 0.75rem; }
+  .api-row input {
+    flex: 1;
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: var(--negro);
+    background: var(--fondo);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .api-row input:focus { border-color: var(--morado); }
+  .api-nota {
+    font-size: 0.78rem;
+    color: #aaa;
+    margin-top: 0.6rem;
+  }
+  .api-nota a { color: var(--morado); text-decoration: none; }
+  .pasos-key {
+    margin: 0.75rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--gris);
+    line-height: 1.7;
+  }
+  .pasos-key li { margin-bottom: 0.25rem; }
+  .pasos-key a { color: var(--morado); text-decoration: none; font-weight: 500; }
+  .pasos-key strong { font-weight: 600; color: var(--negro); }
+
+  .form-card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--negro);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.92rem;
+    color: var(--negro);
+    background: var(--fondo);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--morado); background: var(--blanco); }
+  .form-group textarea { min-height: 70px; }
+  .form-group select { appearance: none; cursor: pointer; }
+
+  .form-section-title {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--morado);
+    margin: 1.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--morado-claro);
+    grid-column: 1 / -1;
+  }
+
+  .formato-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    grid-column: 1 / -1;
+  }
+  .formato-card {
+    border: 1.5px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .formato-card:hover { border-color: var(--morado-medio); }
+  .formato-card.selected {
+    border-color: var(--morado);
+    background: var(--morado-claro);
+  }
+  .formato-card h4 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: var(--negro);
+  }
+  .formato-card p {
+    font-size: 0.8rem;
+    color: var(--gris);
+    margin: 0;
+  }
+
+  .btn-generar {
+    width: 100%;
+    background: var(--morado);
+    color: var(--blanco);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .btn-generar:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-generar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 3rem;
+    color: var(--gris);
+    font-size: 0.95rem;
+  }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--morado-claro);
+    border-top-color: var(--morado);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .resultado {
+    display: none;
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .resultado-header {
+    background: var(--morado);
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .resultado-header h2 {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--blanco);
+    letter-spacing: -0.02em;
+  }
+  .resultado-actions { display: flex; gap: 0.5rem; }
+  .btn-copiar {
+    background: rgba(255,255,255,0.15);
+    color: var(--blanco);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 99px;
+    padding: 0.4rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-copiar:hover { background: rgba(255,255,255,0.25); }
+
+  .resultado-body { padding: 2rem; overflow-x: auto; }
+
+  .rubrica-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .rubrica-tabla th {
+    background: var(--morado-claro);
+    color: var(--morado);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gris-borde);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .rubrica-tabla td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gris-borde);
+    vertical-align: top;
+    color: #2a2a2a;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .rubrica-tabla tr:nth-child(even) td { background: var(--fondo); }
+  .criterio-cell { font-weight: 500; color: var(--negro); background: var(--morado-claro) !important; }
+
+  .error-msg {
+    display: none;
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: #c0392b;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .page-footer {
+    text-align: center;
+    padding: 2rem 0 0;
+    color: #bbb;
+    font-size: 0.8rem;
+  }
+  .page-footer a { color: var(--morado); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    .form-section-title { grid-column: 1; }
+    .formato-selector { grid-column: 1; grid-template-columns: 1fr; }
+    .rubrica-tabla { font-size: 0.75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">IA para <span>Creativos</span></a>
+  <a href="index.html" class="nav-back">← Volver</a>
+</nav>
+
+<div class="container">
+
+  <span class="page-eyebrow">Herramienta gratuita</span>
+  <h1 class="page-title">Generador de <span>Rúbricas</span></h1>
+  <p class="page-desc">Describe tu materia o proyecto y genera una rúbrica de evaluación completa, lista para usar en clase o compartir con tus estudiantes.</p>
+
+  <div class="api-block">
+    <label for="api-key">Tu API Key de Groq (gratuita)</label>
+    <div class="api-row">
+      <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off">
+    </div>
+    <p class="api-nota">Tu key nunca sale de tu navegador. ¿No tienes una? Sigue estos pasos:</p>
+    <ol class="pasos-key">
+      <li>Entra a <a href="https://console.groq.com" target="_blank">console.groq.com</a> y crea una cuenta gratis (con Google es lo más rápido)</li>
+      <li>En el menú superior, clic en <strong>API Keys</strong></li>
+      <li>Clic en <strong>Create API Key</strong>, ponle el nombre que quieras</li>
+      <li>Copia la key apenas aparezca — solo se muestra una vez</li>
+      <li>Pégala arriba en el campo de esta página</li>
+    </ol>
+  </div>
+
+  <div class="form-card">
+    <div class="form-grid">
+
+      <div class="form-section-title">Datos de la evaluación</div>
+
+      <div class="form-group full">
+        <label for="materia">Materia o curso</label>
+        <input type="text" id="materia" placeholder="Ej: Historia del diseño, Taller de fotografía, Geometría descriptiva...">
+      </div>
+
+      <div class="form-group full">
+        <label for="actividad">¿Qué se va a evaluar?</label>
+        <textarea id="actividad" placeholder="Describe la actividad, proyecto, ensayo o entregable que los estudiantes presentarán"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="nivel">Nivel educativo</label>
+        <select id="nivel">
+          <option value="">Selecciona...</option>
+          <option>Preparatoria / Bachillerato</option>
+          <option>Licenciatura - primeros semestres</option>
+          <option>Licenciatura - semestres avanzados</option>
+          <option>Posgrado</option>
+          <option>Taller o curso libre</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="puntaje">Puntaje o porcentaje total</label>
+        <input type="text" id="puntaje" placeholder="Ej: 100 puntos, 20% de la calificación final">
+      </div>
+
+      <div class="form-group full">
+        <label for="criterios">Criterios que quieres evaluar (opcional)</label>
+        <textarea id="criterios" placeholder="Si ya sabes qué criterios usar, escríbelos aquí. Si no, la IA los propone según la actividad."></textarea>
+      </div>
+
+      <div class="form-section-title">Formato de la rúbrica</div>
+
+      <div class="formato-selector">
+        <div class="formato-card selected" data-formato="niveles" onclick="seleccionarFormato('niveles')">
+          <h4>Niveles de desempeño</h4>
+          <p>Excelente, Bueno, Suficiente, Insuficiente — con descripción cualitativa en cada nivel</p>
+        </div>
+        <div class="formato-card" data-formato="numerico" onclick="seleccionarFormato('numerico')">
+          <h4>Escala numérica</h4>
+          <p>Puntaje específico por criterio que suma al total</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="btn-generar" id="btn-generar" onclick="generarRubrica()">
+    Generar rúbrica
+  </button>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    Generando tu rúbrica...
+  </div>
+
+  <div class="resultado" id="resultado">
+    <div class="resultado-header">
+      <h2>Rúbrica generada</h2>
+      <div class="resultado-actions">
+        <button class="btn-copiar" onclick="copiarTexto()">Copiar texto</button>
+        <button class="btn-copiar" onclick="copiarTabla()">Copiar tabla</button>
+      </div>
+    </div>
+    <div class="resultado-body" id="resultado-body"></div>
+  </div>
+
+  <div class="page-footer">
+    <p>Una herramienta de <a href="index.html">IA para Creativos</a> · Por Claudia Martínez</p>
+  </div>
+
+</div>
+
+<script>
+let formatoActual = 'niveles';
+
+function seleccionarFormato(formato) {
+  formatoActual = formato;
+  document.querySelectorAll('.formato-card').forEach(card => {
+    card.classList.toggle('selected', card.dataset.formato === formato);
+  });
+}
+
+async function generarRubrica() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) { mostrarError('Ingresa tu API key de Groq para continuar.'); return; }
+
+  const materia = document.getElementById('materia').value.trim();
+  const actividad = document.getElementById('actividad').value.trim();
+  const nivel = document.getElementById('nivel').value;
+  const puntaje = document.getElementById('puntaje').value.trim();
+  const criterios = document.getElementById('criterios').value.trim();
+
+  if (!materia || !actividad) {
+    mostrarError('Completa al menos: materia y qué se va a evaluar.');
+    return;
+  }
+
+  ocultarError();
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('btn-generar').disabled = true;
+
+  const formatoInstruccion = formatoActual === 'niveles'
+    ? `Usa 4 niveles de desempeño: Excelente, Bueno, Suficiente, Insuficiente. Cada celda debe tener una descripción cualitativa específica de qué caracteriza ese nivel en ese criterio — no genérica.`
+    : `Usa escala numérica. Asigna un puntaje específico a cada nivel dentro de cada criterio, de manera que la suma total coincida con el puntaje total indicado. Cada celda debe indicar el rango de puntos y qué se necesita para alcanzarlo.`;
+
+  const prompt = `Eres un especialista en diseño curricular y evaluación educativa con amplia experiencia en educación superior. Genera una rúbrica de evaluación profesional y específica.
+
+DATOS:
+- Materia/curso: ${materia}
+- Qué se evalúa: ${actividad}
+- Nivel educativo: ${nivel || 'No especificado, infiere uno razonable'}
+- Puntaje total: ${puntaje || '100 puntos'}
+- Criterios sugeridos por el usuario: ${criterios || 'Ninguno, propón los criterios más relevantes para esta actividad'}
+
+FORMATO: ${formatoInstruccion}
+
+INSTRUCCIONES:
+1. Identifica entre 4 y 6 criterios de evaluación específicos y relevantes para esta actividad concreta (no genéricos como "presentación" sin más, sino criterios que reflejen qué hace que ESTA actividad específica sea exitosa)
+2. Para cada criterio, describe qué caracteriza cada nivel de desempeño de forma concreta y observable
+3. Las descripciones deben ser accionables: un estudiante debe poder leer su nivel y entender exactamente qué le faltó o qué hizo bien
+4. Evita frases vagas como "buen trabajo" o "cumple parcialmente" — sé específico sobre qué significa eso en el contexto de la actividad
+
+FORMATO DE RESPUESTA — responde ÚNICAMENTE con una tabla en formato markdown, así:
+
+| Criterio | Excelente | Bueno | Suficiente | Insuficiente |
+|---|---|---|---|---|
+| [nombre criterio] | [descripción específica] | [descripción específica] | [descripción específica] | [descripción específica] |
+
+No incluyas texto antes ni después de la tabla. Solo la tabla en markdown.`;
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        max_tokens: 3000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        mostrarError('Tu API key no es válida o fue revocada. Genera una nueva en console.groq.com y vuelve a intentar.');
+      } else if (response.status === 429) {
+        mostrarError('Alcanzaste el límite de uso por ahora. Espera un minuto e intenta de nuevo.');
+      } else {
+        const msg = data?.error?.message || 'Error al conectar con la API.';
+        mostrarError('Error: ' + msg);
+      }
+      return;
+    }
+
+    const texto = data.choices[0].message.content;
+    renderizarTabla(texto);
+
+  } catch (err) {
+    mostrarError('No se pudo conectar. Verifica tu conexión a internet e intenta de nuevo.');
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('btn-generar').disabled = false;
+  }
+}
+
+function renderizarTabla(markdown) {
+  const lineas = markdown.trim().split('\n').filter(l => l.trim().startsWith('|'));
+  if (lineas.length < 2) {
+    document.getElementById('resultado-body').innerHTML = '<p>' + markdown.replace(/\n/g, '<br>') + '</p>';
+    document.getElementById('resultado').style.display = 'block';
+    return;
+  }
+
+  const filas = lineas.filter((l, i) => i !== 1).map(l =>
+    l.split('|').map(c => c.trim()).filter((c, i, arr) => i !== 0 && i !== arr.length - 1)
+  );
+
+  const header = filas[0];
+  const body = filas.slice(1);
+
+  let html = '<table class="rubrica-tabla"><thead><tr>';
+  header.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  body.forEach(fila => {
+    html += '<tr>';
+    fila.forEach((celda, i) => {
+      html += i === 0 ? `<td class="criterio-cell">${celda}</td>` : `<td>${celda}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+
+  document.getElementById('resultado-body').innerHTML = html;
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  window._ultimaTablaMarkdown = markdown;
+}
+
+function copiarTexto() {
+  const texto = document.getElementById('resultado-body').innerText;
+  navigator.clipboard.writeText(texto).then(() => {
+    const btns = document.querySelectorAll('.btn-copiar');
+    btns[0].textContent = '¡Copiado!';
+    setTimeout(() => btns[0].textContent = 'Copiar texto', 2000);
+  });
+}
+
+function copiarTabla() {
+  const markdown = window._ultimaTablaMarkdown || '';
+  navigator.clipboard.writeText(markdown).then(() => {
+    const btns = document.querySelectorAll('.btn-copiar');
+    btns[1].textContent = '¡Copiado!';
+    setTimeout(() => btns[1].textContent = 'Copiar tabla', 2000);
+  });
+}
+
+function mostrarError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function ocultarError() {
+  document.getElementById('error-msg').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
