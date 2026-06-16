@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA para Creativos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --morado: #5B2D8E;
+    --morado-claro: #EDE6F6;
+    --morado-medio: #C4A8E8;
+    --teal: #00C9B1;
+    --teal-claro: #E0FAF7;
+    --negro: #0D0D0D;
+    --gris: #6B6B6B;
+    --gris-borde: #E5E5E5;
+    --fondo: #FAFAFA;
+    --blanco: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--fondo);
+    color: var(--negro);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 6vw;
+    border-bottom: 1px solid var(--gris-borde);
+    position: sticky;
+    top: 0;
+    background: rgba(250,250,250,0.94);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--negro);
+    text-decoration: none;
+  }
+  .logo span { color: var(--morado); }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+  nav a.nav-link {
+    font-size: 0.875rem;
+    color: var(--gris);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav a.nav-link:hover { color: var(--morado); }
+
+  .btn-nav {
+    background: var(--morado);
+    color: var(--blanco);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-nav:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    padding: 7rem 6vw 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--morado);
+    background: var(--morado-claro);
+    padding: 0.35rem 0.9rem;
+    border-radius: 99px;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    max-width: 14ch;
+    margin-bottom: 1.75rem;
+    color: var(--negro);
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--morado);
+  }
+
+  .teal-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .teal-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--teal);
+    z-index: -1;
+    opacity: 0.5;
+    border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: #3a3a3a;
+    max-width: 44ch;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--morado);
+    color: var(--blanco);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-secondary {
+    color: var(--gris);
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+    border-bottom: 1px solid var(--gris-borde);
+    padding-bottom: 2px;
+  }
+  .btn-secondary:hover { color: var(--negro); border-color: var(--negro); }
+  .btn-secondary::after { content: '→'; }
+
+  /* DIVISOR */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--gris-borde);
+  }
+
+  /* SECCIONES */
+  section { padding: 5rem 6vw; }
+  .inner { max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+    color: var(--negro);
+  }
+
+  .section-desc {
+    color: var(--gris);
+    max-width: 48ch;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.65;
+    margin-bottom: 3rem;
+  }
+
+  /* CANAL */
+  .canal-section { background: var(--blanco); }
+
+  .canal-card {
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    padding: 2.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    max-width: 640px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--blanco);
+  }
+  .canal-card:hover {
+    border-color: var(--morado-medio);
+    box-shadow: 0 4px 24px rgba(91,45,142,0.08);
+  }
+
+  .canal-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--morado-claro);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .canal-icon svg { width: 26px; height: 26px; fill: var(--morado); }
+
+  .canal-card h3 {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.45rem;
+    letter-spacing: -0.02em;
+    color: var(--negro);
+  }
+
+  .canal-card p {
+    color: var(--gris);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .link-morado {
+    color: var(--morado);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: opacity 0.2s;
+    border-bottom: 1.5px solid var(--morado-medio);
+    padding-bottom: 1px;
+  }
+  .link-morado:hover { opacity: 0.7; }
+  .link-morado::after { content: '→'; }
+
+  /* HERRAMIENTAS */
+  .tools-section { background: var(--fondo); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tool-card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 14px;
+    padding: 1.75rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .tool-card:hover {
+    border-color: var(--morado-medio);
+    box-shadow: 0 4px 20px rgba(91,45,142,0.07);
+  }
+
+  .tool-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    margin-bottom: 1.1rem;
+  }
+
+  .tag-pronto {
+    background: var(--morado-claro);
+    color: var(--morado);
+  }
+
+  .tag-gratis {
+    background: var(--teal-claro);
+    color: #00796b;
+  }
+
+  .tool-card h3 {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+    color: var(--negro);
+  }
+
+  .tool-card p {
+    color: var(--gris);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* EMAIL */
+  .email-section {
+    background: var(--morado-claro);
+    border-top: 1px solid var(--morado-medio);
+    text-align: center;
+  }
+
+  .email-section .section-label { color: var(--morado); }
+  .email-section .section-title { color: var(--morado); }
+  .email-section .section-desc { color: #7a5fa0; margin: 0 auto 2.5rem; }
+
+  .email-form {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  .email-form input {
+    flex: 1;
+    min-width: 210px;
+    background: var(--blanco);
+    border: 1px solid var(--morado-medio);
+    border-radius: 99px;
+    padding: 0.875rem 1.5rem;
+    color: var(--negro);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .email-form input::placeholder { color: #aaa; }
+  .email-form input:focus { border-color: var(--morado); }
+
+  .btn-email {
+    background: var(--morado);
+    color: var(--blanco);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .btn-email:hover { opacity: 0.82; }
+
+  .email-nota {
+    font-size: 0.8rem;
+    color: #9b7ec0;
+    margin-top: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 6vw;
+    border-top: 1px solid var(--gris-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--blanco);
+  }
+
+  footer p { color: #aaa; font-size: 0.85rem; }
+
+  .footer-links { display: flex; gap: 1.5rem; }
+
+  footer a {
+    color: #aaa;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--morado); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .nav-links { gap: 1rem; }
+    .canal-card { flex-direction: column; }
+    footer { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">IA para <span>Creativos</span></a>
+  <div class="nav-links">
+    <a href="#canal" class="nav-link">Canal</a>
+    <a href="#herramientas" class="nav-link">Herramientas</a>
+    <a href="#lista" class="btn-nav">Únete</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="eyebrow">Claudia Martínez · Diseñadora y profesora</span>
+  <h1>Piensa menos.<br><em class="teal-underline">Crea más.</em></h1>
+  <p class="hero-sub">IA para el que diseña, enseña y crea. Herramientas, videos y recursos en español para creativos de todo el mundo.</p>
+  <div class="hero-ctas">
+    <a href="https://youtube.com/@iaparacreativos" class="btn-primary" target="_blank">Ver el canal</a>
+    <a href="#herramientas" class="btn-secondary">Ver herramientas</a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- CANAL -->
+<section class="canal-section" id="canal">
+  <div class="inner">
+    <p class="section-label">YouTube</p>
+    <h2 class="section-title">El canal</h2>
+    <p class="section-desc">Videos prácticos sobre cómo usar IA en procesos reales de diseño y educación. Sin rodeos, en español.</p>
+    <div class="canal-card">
+      <div class="canal-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
+        </svg>
+      </div>
+      <div>
+        <h3>IA para Creativos</h3>
+        <p>Aprende a usar inteligencia artificial en tu proceso creativo y docente. Cada video es una herramienta, no un tutorial más.</p>
+        <a href="https://youtube.com/@iaparacreativos" class="link-morado" target="_blank">Ir al canal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HERRAMIENTAS -->
+<section class="tools-section" id="herramientas">
+  <div class="inner">
+    <p class="section-label">Herramientas</p>
+    <h2 class="section-title">Recursos descargables</h2>
+    <p class="section-desc">Archivos listos para usar. Sin suscripciones, sin servidores. Tú traes tu API key, yo traje el diseño.</p>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-tag tag-pronto">Próximamente</span>
+        <h3>Generador de briefs</h3>
+        <p>Crea briefs de diseño completos en segundos. Para talleres, clases o proyectos reales.</p>
+      </div>
+      <div class="tool-card">
+        <span class="tool-tag tag-pronto">Próximamente</span>
+        <h3>Evaluador de portafolios</h3>
+        <p>Retroalimentación estructurada para proyectos de diseño, con criterios personalizables.</p>
+      </div>
+      <div class="tool-card">
+        <span class="tool-tag tag-pronto">Próximamente</span>
+        <h3>Generador de rúbricas</h3>
+        <p>Rúbricas de evaluación listas para imprimir o compartir, adaptadas a tu materia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL -->
+<section class="email-section" id="lista">
+  <div class="inner">
+    <p class="section-label">Lista de espera</p>
+    <h2 class="section-title">Avísame cuando haya algo nuevo</h2>
+    <p class="section-desc">Sin spam. Solo un correo cuando haya algo que valga la pena.</p>
+    <form class="email-form" onsubmit="handleSubmit(event)">
+      <input type="email" placeholder="tu@correo.com" required id="email-input">
+      <button type="submit" class="btn-email">Apuntarme</button>
+    </form>
+    <p class="email-nota">Puedes salir cuando quieras.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 IA para Creativos · Claudia Martínez · Querétaro, México</p>
+  <div class="footer-links">
+    <a href="https://youtube.com/@iaparacreativos" target="_blank">YouTube</a>
+    <a href="mailto:hola@iaparacreativos.com">Contacto</a>
+  </div>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const input = document.getElementById('email-input');
+  btn.textContent = '¡Listo!';
+  btn.style.background = '#00C9B1';
+  setTimeout(() => {
+    btn.textContent = 'Apuntarme';
+    btn.style.background = '';
+    input.value = '';
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
